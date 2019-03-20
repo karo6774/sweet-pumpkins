@@ -5,9 +5,17 @@ import Button from "../Button";
 
 const apiRoot = "https://api.themoviedb.org/3";
 
-function assembleQuery(filters, page) {
-    return `&page=${page}` + filters;
-}
+const assembleQuery = (filters, page) =>
+    `&page=${page}` + filters;
+
+const assembleDiscoverUrl = query =>
+    `${apiRoot}/discover/movie` +
+    `?api_key=${process.env.REACT_APP_TMDB_API_KEY}` +
+    `&language=en-US` +
+    `&sort_by=popularity.desc` +
+    `&include_adult=false` +
+    `&include_video=false` +
+    query;
 
 const Movies = ({filters, page, onNavigation}) => {
     const [pages, setPages] = useState(1);
@@ -16,14 +24,8 @@ const Movies = ({filters, page, onNavigation}) => {
 
     function loadMovies(q) {
         setMovies([]);
-        const url =
-            `${apiRoot}/discover/movie` +
-            `?api_key=${process.env.REACT_APP_TMDB_API_KEY}` +
-            `&language=en-US` +
-            `&sort_by=popularity.desc` +
-            `&include_adult=false` +
-            `&include_video=false` +
-            q;
+        const url = assembleDiscoverUrl(q);
+
         fetch(url)
             .then(async r => {
                 const data = await r.json();
