@@ -72,7 +72,7 @@ const Main = () => {
     useEffect(() => {
         (async () => {
             setGenres(genres.concat(await listGenres()));
-        })();
+        })().catch(console.error);
     }, []);
     // scroll to top when page changes
     useEffect(() => window.scrollTo({top: 0}), [page]);

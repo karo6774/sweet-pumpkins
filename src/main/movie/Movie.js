@@ -9,7 +9,7 @@ const Movie = ({match: {params: {id}}}) => {
     useEffect(() => {
         (async () => {
             setMovie(await movieDetails(id));
-        })();
+        })().catch(console.error);
     }, [id]);
 
     if (movie === null) {
