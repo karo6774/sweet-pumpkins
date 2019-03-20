@@ -31,7 +31,7 @@ export default class Main extends Component {
             }
         };
         const filtersQuery = Main.assembleFilters(filters);
-        return {filters, filtersQuery};
+        return {filters, filtersQuery, page: 1};
     })();
 
     static assembleFilters(filters) {
@@ -71,6 +71,11 @@ export default class Main extends Component {
         this.setState({filters});
     };
 
+    onNavigation = page => {
+        this.setState({page});
+        window.scrollTo({top: 0});
+    };
+
     render() {
         return (
             <section className="main">
@@ -78,7 +83,7 @@ export default class Main extends Component {
                     filters={this.state.filters}
                     onSearch={this.onSearch}
                     onFiltersChanged={this.onFiltersChanged}/>
-                <Movies filters={this.state.filtersQuery}/>
+                <Movies filters={this.state.filtersQuery} page={this.state.page} onNavigation={this.onNavigation}/>
             </section>
         );
     }

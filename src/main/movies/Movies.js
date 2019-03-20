@@ -9,8 +9,7 @@ function assembleQuery(filters, page) {
     return `&page=${page}` + filters;
 }
 
-const Movies = ({filters}) => {
-    const [page, setPage] = useState(1);
+const Movies = ({filters, page, onNavigation}) => {
     const [pages, setPages] = useState(1);
     const [query, setQuery] = useState("");
     const [movies, setMovies] = useState([]);
@@ -44,7 +43,7 @@ const Movies = ({filters}) => {
         } else if (page > pages) {
             page = pages;
         }
-        setPage(page);
+        onNavigation(page);
     }
 
     useEffect(() => {
