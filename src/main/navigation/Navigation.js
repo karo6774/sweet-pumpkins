@@ -8,6 +8,7 @@ export default class Navigation extends Component {
     onSearch;
     onFiltersChanged;
     filters;
+    genres;
 
     setGenre = genre => {
         this.props.onFiltersChanged({...this.props.filters, genre});
@@ -35,7 +36,7 @@ export default class Navigation extends Component {
         return (
             <section className="navigation">
                 <Selection selected={this.props.filters.genre}
-                           values={this.props.filters.genres.map(it => ({display: it.name, value: it.id}))}
+                           values={this.props.genres.map(it => ({display: it.name, value: it.id}))}
                            onChanged={this.setGenre}>Genre</Selection>
                 <Slider data={this.props.filters.year} onChange={this.setYear}>Year</Slider>
                 <Slider data={this.props.filters.rating} onChange={this.setRating}>Rating</Slider>
