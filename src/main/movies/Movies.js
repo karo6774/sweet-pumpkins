@@ -22,9 +22,9 @@ const Movies = ({filters, page, onNavigation}) => {
     const [query, setQuery] = useState("");
     const [movies, setMovies] = useState([]);
 
-    function loadMovies(q) {
+    function loadMovies() {
         setMovies([]);
-        const url = assembleDiscoverUrl(q);
+        const url = assembleDiscoverUrl(query);
 
         fetch(url)
             .then(async r => {
@@ -48,12 +48,13 @@ const Movies = ({filters, page, onNavigation}) => {
         onNavigation(page);
     }
 
+    // load movies when query changes
     useEffect(() => {
-        const newQuery = assembleQuery(filters, page);
-        if (query !== newQuery) {
-            setQuery(newQuery);
-            loadMovies(newQuery);
-        }
+        loadMovies();
+    }, [query]);
+    // update query when filters or page changes
+    useEffect(() => {
+        setQuery(assembleQuery(filters, page));
     }, [page, filters]);
 
     return (
