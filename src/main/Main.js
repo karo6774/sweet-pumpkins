@@ -22,8 +22,26 @@ function assembleFilters(filters) {
     return query;
 }
 
+const setStorage = (name, value) => localStorage.setItem(name, JSON.stringify(value));
+
+function getStorage(name) {
+    let value = localStorage.getItem(name);
+    if (value !== null) {
+        value = JSON.parse(value);
+    }
+    return value;
+}
+
+function getStorageOr(name, def) {
+    let value = getStorage(name);
+    if (value === null) {
+        value = def;
+    }
+    return value;
+}
+
 const Main = () => {
-    const [filters, setFilters] = useState({
+    const [filters, setFilters] = useState(getStorageOr("sweet-pumpkins.filters", {
         genre: -1,
         year: {
             min: 1990,
@@ -43,11 +61,16 @@ const Main = () => {
             step: 15,
             value: {min: 60, max: 120}
         }
-    });
+    }));
     const [filtersQuery, setFiltersQuery] = useState(assembleFilters(filters));
     const [genres, setGenres] = useState([{id: -1, name: "All"}]);
-    const [page, setPage] = useState(1);
+    const [page, setPage] = useState(getStorageOr("sweet-pumpkins.page", 1));
 
+    // save state to local storage
+    useEffect(() => {
+        setStorage("sweet-pumpkins.filters", filters);
+        setStorage("sweet-pumpkins.page", page);
+    });
     // fetch genres
     useEffect(() => {
         (async () => {
