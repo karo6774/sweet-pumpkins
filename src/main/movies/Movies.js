@@ -2,38 +2,30 @@ import React, {useState, useEffect} from "react";
 import "./Movies.css";
 import MovieListItem from "./MovieListItem";
 import Button from "../Button";
+import {listMovies} from "../../TMDB";
 
-const apiRoot = "https://api.themoviedb.org/3";
-
-const assembleQuery = (filters, page) =>
-    `&page=${page}` + filters;
-
-const assembleDiscoverUrl = query =>
-    `${apiRoot}/discover/movie` +
-    `?api_key=${process.env.REACT_APP_TMDB_API_KEY}` +
-    `&language=en-US` +
-    `&sort_by=popularity.desc` +
-    `&include_adult=false` +
-    `&include_video=false` +
-    query;
+const assembleQuery = (query, page) => Object.assign(
+    {
+        sort_by: "popularity.desc",
+        include_adult: false,
+        include_video: false,
+        page
+    },
+    query
+);
 
 const Movies = ({filters, page, onNavigation}) => {
     const [pages, setPages] = useState(1);
-    const [query, setQuery] = useState("");
+    const [query, setQuery] = useState({});
     const [movies, setMovies] = useState([]);
 
     async function loadMovies() {
         setMovies([]);
-        const url = assembleDiscoverUrl(query);
 
-        const r = await fetch(url);
-        const data = await r.json();
-        const movies = data.results.map(result => {
-            const {vote_count, id, genre_ids, poster_path, title, vote_average, release_date} = result;
-            return {vote_count, id, genre_ids, poster_path, title, vote_average, release_date};
-        });
-        setPages(data.total_pages);
-        setMovies(movies);
+        const {movies: mov, totalPages} = await listMovies(assembleQuery(filters, page));
+
+        setPages(totalPages);
+        setMovies(mov);
     }
 
     function setClampedPage(page) {

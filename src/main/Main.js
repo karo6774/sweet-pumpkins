@@ -7,18 +7,17 @@ const apiRoot = "https://api.themoviedb.org/3";
 const genresUrl = `${apiRoot}/genre/movie/list?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US`;
 
 function assembleFilters(filters) {
-    let query = "";
+    const query = {};
     const {genre, year, rating, runtime} = filters;
     if (genre >= 0) {
-        query += `&with_genres=${genre}`
+        query.with_genres = genre;
     }
-    query +=
-        `&primary_release_date.gte=${year.value.min}-01-01` +
-        `&primary_release_date.lte=${year.value.max}-12-31` +
-        `&vote_average.gte=${rating.value.min}` +
-        `&vote_average.lte=${rating.value.max}` +
-        `&with_runtime.gte=${runtime.value.min}` +
-        `&with_runtime.lte=${runtime.value.max}`;
+    query['primary_release_date.gte'] = `${year.value.min}-01-01`;
+    query['primary_release_date.lte'] = `${year.value.max}-12-31`;
+    query['vote_average.gte'] = rating.value.min;
+    query['vote_average.lte'] = rating.value.max;
+    query['with_runtime.gte'] = runtime.value.min;
+    query['with_runtime.lte'] = runtime.value.max;
     return query;
 }
 
