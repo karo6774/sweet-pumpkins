@@ -34,7 +34,7 @@ const Movie = ({match: {params: {id}}}) => {
         const releaseYear = release_date.substr(0, 4);
         const backgroundStyle = {
             backgroundImage: `url(http://image.tmdb.org/t/p/w1280/${backdrop_path})`
-        }
+        };
         return (
             <div className="movie-page">
                 <div className="movie-image" style={backgroundStyle}/>
