@@ -9,6 +9,14 @@
     box-shadow: 0 10px 28px -7px rgba(0,0,0,0.1);
 }
 
+.thumbnail {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    cursor: pointer;
+    text-decoration: none;
+}
+
 .movie-item img {
     width: 100%;
 }
