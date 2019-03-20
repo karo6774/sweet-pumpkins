@@ -2,11 +2,9 @@ import React, {useState, useEffect} from "react";
 import "./Main.css";
 import Navigation from "./navigation/Navigation";
 import Movies from "./movies/Movies";
+import {listGenres} from "../TMDB";
 
-const apiRoot = "https://api.themoviedb.org/3";
-const genresUrl = `${apiRoot}/genre/movie/list?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US`;
-
-function assembleFilters(filters) {
+function assembleFiltersQuery(filters) {
     const query = {};
     const {genre, year, rating, runtime} = filters;
     if (genre >= 0) {
@@ -61,7 +59,7 @@ const Main = () => {
             value: {min: 60, max: 120}
         }
     }));
-    const [filtersQuery, setFiltersQuery] = useState(assembleFilters(filters));
+    const [filtersQuery, setFiltersQuery] = useState(assembleFiltersQuery(filters));
     const [genres, setGenres] = useState([{id: -1, name: "All"}]);
     const [page, setPage] = useState(getStorageOr("sweet-pumpkins.page", 1));
 
@@ -73,9 +71,7 @@ const Main = () => {
     // fetch genres
     useEffect(() => {
         (async () => {
-            const r = await fetch(genresUrl);
-            const data = await r.json();
-            setGenres(genres.concat(data.genres));
+            setGenres(genres.concat(await listGenres()));
         })();
     }, []);
     // scroll to top when page changes
@@ -86,7 +82,7 @@ const Main = () => {
             <Navigation
                 filters={filters}
                 genres={genres}
-                onSearch={() => setFiltersQuery(assembleFilters(filters))}
+                onSearch={() => setFiltersQuery(assembleFiltersQuery(filters))}
                 onFiltersChanged={setFilters}/>
             <Movies filters={filtersQuery} page={page} onNavigation={setPage}/>
         </section>

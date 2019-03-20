@@ -10,11 +10,11 @@ function assembleDefaultQuery(query) {
     return new URLSearchParams(merged).toString();
 }
 
-function assembleApiUrl(path, query) {
+function assembleApiUrl(path, query = {}) {
     return new URL(`3${path}?${assembleDefaultQuery(query)}`, apiRoot).toString();
 }
 
-function fetchPath(path, query) {
+function fetchPath(path, query = {}) {
     return fetch(assembleApiUrl(path, query));
 }
 
@@ -30,7 +30,13 @@ export async function listMovies(query) {
     };
 }
 
+export async function listGenres() {
+    const response = await fetchPath("/genre/movie/list");
+    const data = await response.json();
+    return data['genres'];
+}
+
 export async function movieDetails(id) {
-    const response = await fetchPath(`/movie/${id}`, {});
+    const response = await fetchPath(`/movie/${id}`);
     return await response.json();
 }
