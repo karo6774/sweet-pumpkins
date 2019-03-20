@@ -53,7 +53,7 @@ const Movies = ({filters}) => {
             setQuery(newQuery);
             loadMovies(newQuery);
         }
-    });
+    }, [page, filters]);
 
     return (
         <section>
