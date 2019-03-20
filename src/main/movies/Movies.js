@@ -22,21 +22,18 @@ const Movies = ({filters, page, onNavigation}) => {
     const [query, setQuery] = useState("");
     const [movies, setMovies] = useState([]);
 
-    function loadMovies() {
+    async function loadMovies() {
         setMovies([]);
         const url = assembleDiscoverUrl(query);
 
-        fetch(url)
-            .then(async r => {
-                const data = await r.json();
-                const movies = data.results.map(result => {
-                    const {vote_count, id, genre_ids, poster_path, title, vote_average, release_date} = result;
-                    return {vote_count, id, genre_ids, poster_path, title, vote_average, release_date};
-                });
-                setPages(data.total_pages);
-                setMovies(movies);
-            })
-            .catch(console.error);
+        const r = await fetch(url);
+        const data = await r.json();
+        const movies = data.results.map(result => {
+            const {vote_count, id, genre_ids, poster_path, title, vote_average, release_date} = result;
+            return {vote_count, id, genre_ids, poster_path, title, vote_average, release_date};
+        });
+        setPages(data.total_pages);
+        setMovies(movies);
     }
 
     function setClampedPage(page) {
@@ -50,7 +47,7 @@ const Movies = ({filters, page, onNavigation}) => {
 
     // load movies when query changes
     useEffect(() => {
-        loadMovies();
+        loadMovies().catch(console.error);
     }, [query]);
     // update query when filters or page changes
     useEffect(() => {
