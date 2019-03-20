@@ -70,7 +70,7 @@ const Main = () => {
     useEffect(() => {
         setStorage("sweet-pumpkins.filters", filters);
         setStorage("sweet-pumpkins.page", page);
-    }, [filters, page]);
+    }, [filtersQuery, page]);
     // fetch genres
     useEffect(() => {
         (async () => {
