@@ -29,3 +29,8 @@ export async function listMovies(query) {
         totalPages: data['total_pages']
     };
 }
+
+export async function movieDetails(id) {
+    const response = await fetchPath(`/movie/${id}`, {});
+    return await response.json();
+}

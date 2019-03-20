@@ -1,19 +1,14 @@
 import React, {useState, useEffect} from "react";
 import "./Movie.css";
 import LoadingMovie from "./LoadingMovie";
-
-const apiUrl = id =>
-    `https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US`;
+import {movieDetails} from "../../TMDB";
 
 const Movie = ({match: {params: {id}}}) => {
     const [movie, setMovie] = useState(null);
 
     useEffect(() => {
         (async () => {
-            const r = await fetch(apiUrl(id));
-            const data = await r.json();
-            setMovie(data);
-            console.log(data);
+            setMovie(await movieDetails(id));
         })();
     }, [id]);
 
